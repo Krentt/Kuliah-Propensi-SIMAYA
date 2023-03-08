@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Anggota</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+</head>
+<body>
+<div class="container my-5">
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <div class="justify-content-center">
+                <table id="table_anggota" class="display">
+                    <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Pekerjaan</th>
+                        <th>Status</th>
+                        <th>Nomor HP</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                        <td>Data 4</td>
+                        <td>Data 5</td>
+                        <td>Data 6</td>
+                        <td>Data 7</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function (){
+        $('#table_anggota').DataTable({
+            "ajax": {
+                "url": "/api/anggota/view-all",
+                "dataSrc": ''
+            },
+            "searching": true,
+            "ordering": true,
+            "columns": [
+                {"data": ""},
+                {"data": ""},
+                {"data": ""},
+                {"data": ""},
+                {"data": ""},
+                {"data": ""},
+                {"data": ""},
+            ],
+        });
+    });
+</script>
+
+</body>
+</html>
