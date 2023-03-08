@@ -5,24 +5,34 @@
     <title>Daftar Anggota</title>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
+
 </head>
 <body>
 <div class="container my-5">
     <div class="card" style="width: 100%;">
+        <div class="card-header text-center" style="background-color: #DBEFE1">
+            <h3 class="my-auto">Daftar Anggota</h3>
+        </div>
         <div class="card-body">
             <div class="justify-content-center">
+                <br>
                 <table id="table_anggota" class="display">
                     <thead>
                     <tr>
-                        <th>Nama</th>
+                        <th>Nama Lengkap</th>
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
                         <th>Jenis Kelamin</th>
-                        <th>Pekerjaan</th>
+<!--                        <th>Pekerjaan</th>-->
                         <th>Status</th>
                         <th>Nomor HP</th>
+                        <th>Action</th>
                     </tr>
 
                     </thead>
@@ -32,9 +42,10 @@
                         <td>Data 2</td>
                         <td>Data 3</td>
                         <td>Data 4</td>
-                        <td>Data 5</td>
+<!--                        <td>Data 5</td>-->
                         <td>Data 6</td>
                         <td>Data 7</td>
+                        <td>Data 8</td>
                     </tr>
                     </tbody>
                 </table>
@@ -47,19 +58,49 @@
     $(document).ready(function (){
         $('#table_anggota').DataTable({
             "ajax": {
-                "url": "/api/anggota/view-all",
+                "url": "/api/anggota/viewall",
                 "dataSrc": ''
             },
             "searching": true,
             "ordering": true,
+            columnDefs: [ {
+                targets: 2,
+                render: $.fn.dataTable.render.moment('DD MMM YYYY' )
+            } ],
             "columns": [
-                {"data": ""},
-                {"data": ""},
-                {"data": ""},
-                {"data": ""},
-                {"data": ""},
-                {"data": ""},
-                {"data": ""},
+                {"data": null,
+                    "render": function(data){
+                    return data.namaDepan + " " + data.namaBelakang;
+                    }
+                },
+                {"data": "tempatLahir"},
+                {"data": "tanggalLahir"},
+                {"data": null,
+                    "render": function (data){
+                    if (data.jenisKelamin == 0){
+                        return "Laki-Laki";
+                    } else {
+                        return "Perempuan";
+                    }
+                    }
+                },
+                // {"data": null},
+                {"data": null,
+                    "render": function (data){
+                        if (data.statusKeanggotaan == 0){
+                            return "Tidak Aktif";
+                        } else {
+                            return "Aktif";
+                        }
+                    }
+                },
+                {"data": "nomorHP"},
+                {"data": null,
+                    "render": function (data,type) {
+                        return '<a class="btn btn-primary" href="#">' + 'Detail' + '</a>';
+                    }
+                }
+
             ],
         });
     });
