@@ -27,4 +27,8 @@ public class AnggotaController {
         anggotaService.tambahAnggota(anggota);
         return "hello_world";
     }
+    @GetMapping(value = "/anggota/viewall")
+    public String viewAllAnggota() {
+        return "anggota/daftar-anggota";
+    }
 }

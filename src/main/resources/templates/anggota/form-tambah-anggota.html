@@ -28,9 +28,19 @@
             border-color: #28a745;
         }
 
+        body{
+            background-image: url("https://www.linkpicture.com/q/bg_17.png");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: "Segoe UI", "Segoe UI Semibold", "Segoe UI Black", sans-serif;
+        }
+
     </style>
 </head>
 <body>
+<nav th:replace="fragments/fragment :: navbar('anggota')"></nav>
 <div class="container my-5">
     <div class="card" style="width: 100%;">
         <div class="card-header text-center" style="background-color: #DBEFE1">

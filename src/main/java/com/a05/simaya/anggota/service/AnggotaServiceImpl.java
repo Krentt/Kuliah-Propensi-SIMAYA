@@ -8,6 +8,8 @@ import com.a05.simaya.anggota.repository.AnggotaDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AnggotaServiceImpl implements AnggotaService {
 
@@ -34,4 +36,11 @@ public class AnggotaServiceImpl implements AnggotaService {
 
         return anggotaModel;
     }
+
+
+    @Override
+    public List<AnggotaModel> getListAnggota() {
+        return anggotaDb.findAll();
+    }
+
 }
