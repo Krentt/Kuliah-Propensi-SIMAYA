@@ -1,4 +1,4 @@
-package com.a05.simaya.controller;
+package com.a05.simaya.anggota.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

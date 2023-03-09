@@ -1,4 +1,4 @@
-package com.a05.simaya.service;
+package com.a05.simaya.anggota.service;
 
 import com.a05.simaya.anggota.model.AnggotaModel;
 import com.a05.simaya.anggota.repository.AnggotaDb;
