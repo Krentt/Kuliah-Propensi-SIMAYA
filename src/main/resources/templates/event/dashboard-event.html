@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Event</title>
+  <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+  <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-LZxD+OiwwIoHjRuDXsMg7f8y9+dCjTzMJv1dbmQz8gKYSFA+1BLPUwvweKI01Pn8J+YIyTtuTxl1+wTYYJ2zDg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .container {
+      width: 100%;
+    }
+
+    .toppane {
+      width: 100%;
+      height: auto;
+      padding-bottom: 20px;
+    }
+
+    .leftpane {
+      width: 25%;
+    }
+
+    .middlepane {
+      width: 50%;
+    }
+    .rightpane {
+      width: 25%;
+    }
+
+    body {
+      margin: 0!important;
+    }
+
+    .d-flex {
+      display: flex;
+    }
+    .section-title{
+      text-align: center;
+      margin-bottom: 20px;
+
+    }
+    p{
+      margin-bottom: 5px;
+    }
+
+    .event-card {
+      border: 1px solid #DBEFE1;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      height: 100%;
+      margin-bottom: 20px;
+    }
+
+    .event-card:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .event-card h5 {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #28a745;
+    }
+
+    .event-card p {
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .event-card .card-body {
+      padding: 20px;
+      padding-top: 10px;
+      background-color: #DBEFE1;
+    }
+
+    .event-card .date-section {
+      background-color: #28a745;
+      color: #fff;
+      border-radius: 5px 5px 0 0;
+      padding: 10px 20px;
+    }
+
+    .event-card .date-section p {
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .event-card .date-section span {
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .no-event{
+      text-align: center;
+      color: #373435;
+    }
+
+    button{
+      margin-top: 10px;
+    }
+  </style>
+
+</head>
+<body>
+<div class="container my-5">
+  <div class="card" style="width: 100%;">
+    <div class="card-header text-center" style="background-color: #DBEFE1">
+      <h3 class="my-auto">Dashboard Event</h3>
+    </div>
+    <div class="card-body">
+      <div class="toppane">
+        <button type="submit" class="btn btn-success btn-sm">Lihat Semua Event</button>
+      </div>
+      <div class="d-flex">
+        <div class="leftpane">
+          <h5 class="section-title">Event Sedang Berlangsung</h5>
+          <div th:if="${listOngoing != null}" th:each="event : ${listOngoing}">
+            <div class="card event-card shadow">
+              <div class="date-section">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p th:text="${#temporals.format(event.waktuMulai, 'dd MMMM yyyy')}"></p>
+                    <span th:text="${#temporals.format(event.waktuMulai, 'hh:mm a')}"></span>
+                  </div>
+                  <div class="col-sm-6">
+                    <p th:text="${#temporals.format(event.waktuAkhir, 'dd MMMM yyyy')}"></p>
+                    <span th:text="${#temporals.format(event.waktuAkhir, 'hh:mm a')}"></span>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><span th:text="${event.namaEvent}"></span></h5>
+                <p class="card-text"><strong>Tempat:</strong> <span th:text="${event.tempatPelaksanaan}"></span></p>
+                <p class="card-text"><strong>PIC:</strong> <span th:text="${event.penanggungJawab.namaDepan} + ' ' +  ${event.penanggungJawab.namaBelakang}"></span> </p>
+              </div>
+            </div>
+          </div>
+
+          <div th:unless="${listOngoing != null}">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5 class="no-event">Tidak ada event yang sedang berlangsung!</h5>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="middlepane">
+          <h5 class="section-title">Statistik Event Terlaksana</h5>
+        </div>
+        <div class="rightpane">
+          <h5 class="section-title">Event Yang Akan Datang</h5>
+          <div th:if="${listUpcoming != null}" th:each="event : ${listUpcoming}">
+            <div class="card event-card shadow">
+              <div class="date-section">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <p th:text="${#temporals.format(event.waktuMulai, 'dd MMMM yyyy')}"></p>
+                    <span th:text="${#temporals.format(event.waktuMulai, 'hh:mm a')}"></span>
+                  </div>
+                  <div class="col-sm-6">
+                    <p th:text="${#temporals.format(event.waktuAkhir, 'dd MMMM yyyy')}"></p>
+                    <span th:text="${#temporals.format(event.waktuAkhir, 'hh:mm a')}"></span>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><span th:text="${event.namaEvent}"></span></h5>
+                <p class="card-text"><strong>Tempat:</strong> <span th:text="${event.tempatPelaksanaan}"></span></p>
+                <p class="card-text"><strong>PIC:</strong> <span th:text="${event.penanggungJawab.namaDepan} + ' ' +  ${event.penanggungJawab.namaBelakang}"></span> </p>
+              </div>
+            </div>
+          </div>
+
+          <div th:unless="${listUpcoming != null}">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5 class="no-event">Tidak ada event dalam waktu dekat!</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
