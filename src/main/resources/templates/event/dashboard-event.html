@@ -6,6 +6,9 @@
   <object th:include="fragments/fragment :: css" th:remove="tag"></object>
   <object th:include="fragments/fragment :: js" th:remove="tag"></object>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-LZxD+OiwwIoHjRuDXsMg7f8y9+dCjTzMJv1dbmQz8gKYSFA+1BLPUwvweKI01Pn8J+YIyTtuTxl1+wTYYJ2zDg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-shadow"></script>
+
   <style>
     .container {
       width: 100%;
@@ -38,7 +41,7 @@
     .section-title{
       text-align: center;
       margin-bottom: 20px;
-
+      text-decoration: underline;
     }
     p{
       margin-bottom: 5px;
@@ -88,6 +91,7 @@
       margin-bottom: 0;
       font-size: 16px;
       font-weight: bold;
+      color: #FFFFFF;
     }
 
     .event-card .date-section span {
@@ -103,16 +107,26 @@
     button{
       margin-top: 10px;
     }
+    body{
+      background-image: url("https://www.linkpicture.com/q/bg_17.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      font-family: "Segoe UI", "Segoe UI Semibold", "Segoe UI Black", sans-serif;
+    }
+
   </style>
 
 </head>
 <body>
+<nav th:replace="fragments/fragment :: navbar('event')"></nav>
 <div class="container my-5">
   <div class="card" style="width: 100%;">
     <div class="card-header text-center" style="background-color: #DBEFE1">
       <h3 class="my-auto">Dashboard Event</h3>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="padding: 20px 50px">
       <div class="toppane">
         <button type="submit" class="btn btn-success btn-sm">Lihat Semua Event</button>
       </div>
@@ -123,7 +137,7 @@
             <div class="card event-card shadow">
               <div class="date-section">
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 border-right">
                     <p th:text="${#temporals.format(event.waktuMulai, 'dd MMMM yyyy')}"></p>
                     <span th:text="${#temporals.format(event.waktuMulai, 'hh:mm a')}"></span>
                   </div>
@@ -132,8 +146,8 @@
                     <span th:text="${#temporals.format(event.waktuAkhir, 'hh:mm a')}"></span>
                   </div>
                 </div>
-
               </div>
+
               <div class="card-body">
                 <h5 class="card-title"><span th:text="${event.namaEvent}"></span></h5>
                 <p class="card-text"><strong>Tempat:</strong> <span th:text="${event.tempatPelaksanaan}"></span></p>
@@ -151,16 +165,18 @@
           </div>
 
         </div>
-        <div class="middlepane">
+        <div class="middlepane" style="height: 350px;">
           <h5 class="section-title">Statistik Event Terlaksana</h5>
+          <canvas id="pie-chart" ></canvas>
         </div>
+
         <div class="rightpane">
           <h5 class="section-title">Event Yang Akan Datang</h5>
           <div th:if="${listUpcoming != null}" th:each="event : ${listUpcoming}">
             <div class="card event-card shadow">
               <div class="date-section">
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-6 border-right">
                     <p th:text="${#temporals.format(event.waktuMulai, 'dd MMMM yyyy')}"></p>
                     <span th:text="${#temporals.format(event.waktuMulai, 'hh:mm a')}"></span>
                   </div>
@@ -192,5 +208,40 @@
   </div>
 </div>
 
+<script>
+  fetch('/api/chart-data')
+          .then(response => response.json())
+          .then(data => {
+
+            var ctx = document.getElementById('pie-chart').getContext('2d');
+            var chart = new Chart(ctx, {
+              type: 'pie',
+              data: {
+                labels: ['Terlaksana', 'Gagal Terlaksana'],
+                datasets: [{
+                  label: 'Event Progress',
+                  data: [data.done, data.notDone],
+                  backgroundColor: [
+                    "#28a745",
+                    "#E0EFEF",
+                  ],
+                  hoverBackgroundColor: [
+                    '#1e7e34',
+                    '#c8e7de'
+                  ],
+                  borderColor: [
+                    '#6c757d',
+                    '#28a745'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+              }
+            });
+          });
+</script>
 </body>
 </html>

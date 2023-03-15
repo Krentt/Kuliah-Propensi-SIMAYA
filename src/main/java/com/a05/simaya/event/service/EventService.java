@@ -9,4 +9,6 @@ public interface EventService {
     void tambahEvent(CreateEventDTO eventDTO);
     List<EventModel> getListOngoing();
     List<EventModel> getListUpcoming();
+    Integer countDone();
+    Integer countNotDone();
 }

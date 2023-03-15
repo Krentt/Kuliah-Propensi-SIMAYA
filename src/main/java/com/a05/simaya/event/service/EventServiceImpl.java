@@ -62,6 +62,16 @@ public class EventServiceImpl implements EventService{
         }
     }
 
+    @Override
+    public Integer countDone() {
+        return eventDb.countEventsWithAllProgressDone();
+    }
+
+    @Override
+    public Integer countNotDone() {
+        return eventDb.countEventsWithAtLeastOneProgressNotDone();
+    }
+
     private EventModel makeEventModel(CreateEventDTO eventDTO) {
         EventModel eventModel = new EventModel();
         eventModel.setNamaEvent(eventDTO.getNamaEvent());
