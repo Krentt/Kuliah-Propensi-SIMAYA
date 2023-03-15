@@ -57,8 +57,8 @@
 
 <nav th:replace="fragments/fragment :: navbar('event')"></nav>
 
-<div class="container-fluid" th:if="${event.isDeleted == 0}">
-    <div class="card" style="margin: 50px 50px 0px 50px; padding-bottom:20px;background-color: rgba(255, 255, 255, 0.5)" th:if="${event.isDeleted == 0}">
+<div class="container-fluid" th:if="${event.isDeleted.booleanValue() == false}">
+    <div class="card" style="margin: 50px 50px 0px 50px; padding-bottom:20px;background-color: rgba(255, 255, 255, 0.5)">
         <div class="row">
             <div class="col" style="margin-left: 50px;">
                 <div class="container-fluid">
@@ -171,7 +171,7 @@
     </div>
 </div>
 
-<div class="container" th:unless="${event.isDeleted == 0}">
+<div class="container" th:unless="${event.isDeleted.booleanValue() == false}">
     <div class="card" style="margin: 30px">
         <div class="card-header">
             <h4 class="text-center">Event ini telah dihapus!</h4>
