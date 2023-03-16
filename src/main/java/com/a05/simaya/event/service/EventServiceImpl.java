@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public List<EventModel> getListEvent() {
-        return eventDb.findAll();
+        return eventDb.findAllByIsDeletedIsFalse();
     }
 
     @Override

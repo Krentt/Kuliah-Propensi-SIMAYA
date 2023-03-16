@@ -39,10 +39,10 @@ public class EventController {
     @PostMapping(value = "/tambah-event")
     public String postForm(CreateEventDTO event) {
         eventService.tambahEvent(event);
-        return "hello_world";
+        return "redirect:/event/viewall";
     }
 
-    @GetMapping(value = "/viewall")
+    @GetMapping(value = "/event/viewall")
     public String viewAllEvent(){
         return "event/daftar-event";
     }
@@ -64,6 +64,6 @@ public class EventController {
             @PathVariable(value = "id") Long idEvent
     ){
         eventService.deleteEvent(idEvent);
-        return "hello_world";
+        return "redirect:/event/viewall";
     }
 }
