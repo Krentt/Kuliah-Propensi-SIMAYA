@@ -38,4 +38,9 @@ public class EventController {
         eventService.tambahEvent(event);
         return "hello_world";
     }
+
+    @GetMapping(value = "/viewall")
+    public String viewAllEvent(){
+        return "event/daftar-event";
+    }
 }

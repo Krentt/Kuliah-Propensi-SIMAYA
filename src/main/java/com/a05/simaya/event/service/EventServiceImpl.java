@@ -1,11 +1,14 @@
 package com.a05.simaya.event.service;
 
+import com.a05.simaya.anggota.model.AnggotaModel;
 import com.a05.simaya.event.model.DirektoratEnum;
 import com.a05.simaya.event.model.EventModel;
 import com.a05.simaya.event.payload.CreateEventDTO;
 import com.a05.simaya.event.repository.EventDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EventServiceImpl implements EventService{
@@ -30,5 +33,10 @@ public class EventServiceImpl implements EventService{
         eventModel.setPenanggungJawab(eventDTO.getPenanggungJawab());
 
         return eventModel;
+    }
+
+    @Override
+    public List<EventModel> getListEvent() {
+        return eventDb.findAll();
     }
 }
