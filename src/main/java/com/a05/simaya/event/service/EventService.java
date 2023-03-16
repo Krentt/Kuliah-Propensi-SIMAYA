@@ -11,4 +11,6 @@ public interface EventService {
     List<EventModel> getListUpcoming();
     Integer countDone();
     Integer countNotDone();
+    EventModel getEventById(Long idEvent);
+    void deleteEvent(Long idEvent);
 }
