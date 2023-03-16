@@ -4,10 +4,7 @@ package com.a05.simaya.event.controller;
 import com.a05.simaya.anggota.model.AnggotaModel;
 import com.a05.simaya.anggota.service.AnggotaService;
 import com.a05.simaya.event.model.EventModel;
-<<<<<<< HEAD
-=======
 import com.a05.simaya.event.model.ProgresModel;
->>>>>>> a3ce889bedc3a0a67b1e8476108409bebedf0cc8
 import com.a05.simaya.event.payload.CreateEventDTO;
 import com.a05.simaya.event.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;

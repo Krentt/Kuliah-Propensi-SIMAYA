@@ -159,15 +159,21 @@
           <div th:unless="${listOngoing != null}">
             <div class="row">
               <div class="col-sm-12">
-                <h5 class="no-event">Tidak ada event yang sedang berlangsung!</h5>
+                <h6 class="no-event">Tidak ada event yang sedang berlangsung!</h6>
               </div>
             </div>
           </div>
 
         </div>
-        <div class="middlepane" style="height: 350px;">
+        <div class="middlepane">
           <h5 class="section-title">Statistik Event Terlaksana</h5>
-          <canvas id="pie-chart" ></canvas>
+          <div id="chart-unavailable" style="display: none; text-align: center">
+            <h6>Data belum mencukupi!</h6>
+          </div>
+          <div class="card shadow" style="margin: 25px 50px; padding: 20px" id="card-chart">
+            <canvas id="pie-chart" style="max-height: 300px;"></canvas>
+            <p style="padding-top: 15px; text-align: center" id="total-statistik"></p>
+          </div>
         </div>
 
         <div class="rightpane">
@@ -198,7 +204,7 @@
           <div th:unless="${listUpcoming != null}">
             <div class="row">
               <div class="col-sm-12">
-                <h5 class="no-event">Tidak ada event dalam waktu dekat!</h5>
+                <h6 class="no-event">Tidak ada event dalam waktu dekat!</h6>
               </div>
             </div>
           </div>
@@ -207,13 +213,24 @@
     </div>
   </div>
 </div>
-
+<!--<footer th:replace="fragments/fragment :: footer"></footer>-->
 <script>
   fetch('/api/chart-data')
           .then(response => response.json())
           .then(data => {
+            var done = data.done;
+            var notDone = data.notDone;
 
-            var ctx = document.getElementById('pie-chart').getContext('2d');
+            if (done == 0 && notDone == 0) {
+              document.getElementById('pie-chart').style.display = 'none';
+              document.getElementById('card-chart').style.display = 'none';
+              document.getElementById('chart-unavailable').style.display = 'block';
+            } else {
+              const total = data.done + data.notDone;
+              const percentage = total > 0 ? (data.done / total * 100).toFixed(2) : 0;
+              document.getElementById("total-statistik").textContent = "Persentase Event Terlaksana:   " + percentage + "%";
+
+              var ctx = document.getElementById('pie-chart').getContext('2d');
             var chart = new Chart(ctx, {
               type: 'pie',
               data: {
@@ -241,7 +258,9 @@
                 maintainAspectRatio: false,
               }
             });
-          });
+          }}
+          );
+
 </script>
 </body>
 </html>
