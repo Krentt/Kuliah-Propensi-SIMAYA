@@ -4,11 +4,15 @@ import com.a05.simaya.anggota.model.*;
 import com.a05.simaya.anggota.payload.AnggotaDTO;
 import com.a05.simaya.anggota.repository.AnggotaDb;
 import com.a05.simaya.anggota.repository.ProfileAnggotaDb;
+import com.a05.simaya.anggota.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -26,8 +30,9 @@ public class AnggotaServiceImpl implements AnggotaService {
     @Override
     public void tambahAnggota(AnggotaDTO anggota) {
         AnggotaModel anggotaModel = setAnggotaModel(anggota, new AnggotaModel());
+        ProfileModel profileModel = new ProfileModel();
         setUsernamePassword(anggota, anggotaModel);
-        ProfileModel profileModel = setProfileAnggota(anggota.getProfile(), anggotaModel.getProfile());
+        anggotaModel.setProfile(profileModel);
         anggotaDb.save(anggotaModel);
         profileAnggotaDb.save(profileModel);
     }
@@ -62,11 +67,14 @@ public class AnggotaServiceImpl implements AnggotaService {
     @Override
     public void updateDataAnggota(AnggotaDTO anggotaDTO) {
         AnggotaModel anggota = anggotaDb.findAnggotaModelById(anggotaDTO.getId());
+        Long id_profile = anggota.getProfile().getIdProfile();
+
         AnggotaModel updatedAnggota = setAnggotaModel(anggotaDTO, anggota);
-        ProfileModel profileModel = profileAnggotaDb.findProfileModelByAnggota_Id(anggotaDTO.getId());
-        ProfileModel updateProfile = setProfileAnggota(anggotaDTO.getProfile(), profileModel);
-        anggotaDb.save(updatedAnggota);
+        ProfileModel updateProfile = setProfileAnggota(anggotaDTO.getProfile(), anggota.getProfile());
+        updateProfile.setIdProfile(id_profile);
+
         profileAnggotaDb.save(updateProfile);
+        anggotaDb.save(updatedAnggota);
     }
 
     @Override
@@ -89,6 +97,22 @@ public class AnggotaServiceImpl implements AnggotaService {
     public void gantiPassword(String id, String newPassword) {
         AnggotaModel anggotaModel = anggotaDb.findAnggotaModelById(id);
         anggotaModel.setPassword(encrypt(newPassword));
+    }
+
+    @Override
+    public String uploadProfile(MultipartFile image, String username) throws IOException {
+        if (image.isEmpty())
+            return null;
+
+        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+
+        String[] stringSplitted = fileName.split("\\.");
+        String extension = stringSplitted[stringSplitted.length-1];
+
+        String uploadedFileName = username + "." + extension;
+
+        FileUploadUtil.saveFile("src/main/resources/static/user-photos/", username + "." + extension, image);
+        return uploadedFileName;
     }
 
     private AnggotaModel setAnggotaModel(AnggotaDTO anggotaDTO, AnggotaModel anggotaModel) {
@@ -122,6 +146,7 @@ public class AnggotaServiceImpl implements AnggotaService {
         profileModel.setIsPunyaRumah(profileDTO.getIsPunyaRumah());
         profileModel.setIsPunyaVila(profileDTO.getIsPunyaVila());
         profileModel.setCatatan(profileDTO.getCatatan());
+        profileModel.setPhotoUrl(profileDTO.getPhotoUrl());
 
         return profileModel;
     }
