@@ -1,5 +1,6 @@
 package com.a05.simaya.event.service;
 
+import com.a05.simaya.anggota.model.AnggotaModel;
 import com.a05.simaya.event.model.DirektoratEnum;
 import com.a05.simaya.event.model.EventModel;
 import com.a05.simaya.event.payload.CreateEventDTO;
@@ -86,6 +87,11 @@ public class EventServiceImpl implements EventService{
         eventModel.setPenanggungJawab(eventDTO.getPenanggungJawab());
 
         return eventModel;
+    }
+
+    @Override
+    public List<EventModel> getListEvent() {
+        return eventDb.findAllByIsDeletedIsFalse();
     }
 
     @Override
