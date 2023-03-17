@@ -4,15 +4,22 @@ import com.a05.simaya.anggota.model.*;
 import com.a05.simaya.anggota.payload.AnggotaDTO;
 import com.a05.simaya.anggota.repository.AnggotaDb;
 import com.a05.simaya.anggota.repository.ProfileAnggotaDb;
+import com.a05.simaya.anggota.util.FileUploadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @Transactional
+@Slf4j
 public class AnggotaServiceImpl implements AnggotaService {
 
     @Autowired
@@ -21,9 +28,12 @@ public class AnggotaServiceImpl implements AnggotaService {
     @Autowired
     ProfileAnggotaDb profileAnggotaDb;
 
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     @Override
     public void tambahAnggota(AnggotaDTO anggota) {
         AnggotaModel anggotaModel = setAnggotaModel(anggota, new AnggotaModel());
+        setUsernamePassword(anggota, anggotaModel);
         ProfileModel profileModel = setProfileAnggota(anggota.getProfile(), anggotaModel.getProfile());
         anggotaDb.save(anggotaModel);
         profileAnggotaDb.save(profileModel);
@@ -40,8 +50,6 @@ public class AnggotaServiceImpl implements AnggotaService {
         AnggotaModel anggotaModel = anggotaDb.findAnggotaModelById(id);
 
         updateAnggotaDTO.setId(id);
-        updateAnggotaDTO.setUsername(anggotaModel.getUsername());
-        updateAnggotaDTO.setPassword(anggotaModel.getPassword());
         updateAnggotaDTO.setNamaDepan(anggotaModel.getNamaDepan());
         updateAnggotaDTO.setNamaBelakang(anggotaModel.getNamaBelakang());
         updateAnggotaDTO.setEmail(anggotaModel.getEmail());
@@ -70,7 +78,6 @@ public class AnggotaServiceImpl implements AnggotaService {
 
     @Override
     public String encrypt(String password) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
 
@@ -79,10 +86,41 @@ public class AnggotaServiceImpl implements AnggotaService {
         return anggotaDb.findByUsername(username);
     }
 
+    @Override
+    public boolean cekPassword(String id, String oldPassword) {
+        AnggotaModel anggotaModel = anggotaDb.findAnggotaModelById(id);
+        return encoder.matches(oldPassword, anggotaModel.getPassword());
+    }
+
+    @Override
+    public void gantiPassword(String id, String newPassword) {
+        AnggotaModel anggotaModel = anggotaDb.findAnggotaModelById(id);
+        anggotaModel.setPassword(encrypt(newPassword));
+    }
+
+    @Override
+    public String uploadProfile(MultipartFile image, String username) throws IOException {
+        if (image.isEmpty())
+            return null;
+
+        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+
+        String[] stringSplitted = fileName.split("\\.");
+        String extension = stringSplitted[stringSplitted.length-1];
+
+        String uploadedFileName = username + "." + extension;
+
+        FileUploadUtil.saveFile("src/main/resources/static/user-photos/", username + "." + extension, image);
+        return uploadedFileName;
+    }
+
+    @Override
+    public List<AnggotaModel> getListAnggotaBasedonRole(RoleEnum ROLE) {
+        return anggotaDb.findAllByRoleEquals(ROLE);
+    }
+
     private AnggotaModel setAnggotaModel(AnggotaDTO anggotaDTO, AnggotaModel anggotaModel) {
         anggotaModel.setRole(RoleEnum.valueOf(anggotaDTO.getRole()));
-        anggotaModel.setUsername(anggotaDTO.getUsername());
-        anggotaModel.setPassword(encrypt(anggotaDTO.getPassword()));
         anggotaModel.setEmail(anggotaDTO.getEmail());
         anggotaModel.setTanggalLahir(anggotaDTO.getTanggalLahir());
         anggotaModel.setTempatLahir(anggotaDTO.getTempatLahir());
@@ -97,6 +135,12 @@ public class AnggotaServiceImpl implements AnggotaService {
         return anggotaModel;
     }
 
+    private void setUsernamePassword(AnggotaDTO anggotaDTO, AnggotaModel anggotaModel) {
+        anggotaModel.setUsername(anggotaDTO.getUsername());
+        anggotaModel.setPassword(encrypt(anggotaDTO.getPassword()));
+    }
+
+
     private ProfileModel setProfileAnggota(ProfileModel profileDTO, ProfileModel profileModel) {
         profileModel.setDivisi(profileDTO.getDivisi());
         profileModel.setPekerjaan(profileDTO.getPekerjaan());
@@ -106,8 +150,10 @@ public class AnggotaServiceImpl implements AnggotaService {
         profileModel.setIsPunyaRumah(profileDTO.getIsPunyaRumah());
         profileModel.setIsPunyaVila(profileDTO.getIsPunyaVila());
         profileModel.setCatatan(profileDTO.getCatatan());
+        profileModel.setPhotoUrl(profileDTO.getPhotoUrl());
 
         return profileModel;
     }
+
 
 }

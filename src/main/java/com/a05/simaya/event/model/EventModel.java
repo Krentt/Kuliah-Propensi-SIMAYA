@@ -1,6 +1,8 @@
 package com.a05.simaya.event.model;
 
 import com.a05.simaya.anggota.model.AnggotaModel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -62,6 +64,7 @@ public class EventModel {
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "uuid_pj", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)

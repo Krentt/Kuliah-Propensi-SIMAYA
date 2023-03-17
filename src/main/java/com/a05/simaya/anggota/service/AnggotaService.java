@@ -1,8 +1,11 @@
 package com.a05.simaya.anggota.service;
 
 import com.a05.simaya.anggota.model.AnggotaModel;
+import com.a05.simaya.anggota.model.RoleEnum;
 import com.a05.simaya.anggota.payload.AnggotaDTO;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AnggotaService {
@@ -12,4 +15,10 @@ public interface AnggotaService {
     void updateDataAnggota(AnggotaDTO updateAnggota);
     String encrypt(String password);
     AnggotaModel getAnggotaByUsername(String username);
+    boolean cekPassword(String id, String oldPassword);
+    void gantiPassword(String id, String newPassword);
+
+    String uploadProfile(MultipartFile image, String username) throws IOException;
+
+    List<AnggotaModel> getListAnggotaBasedonRole(RoleEnum ROLE);
 }
