@@ -18,7 +18,11 @@ public interface AnggotaService {
     boolean cekPassword(String id, String oldPassword);
     void gantiPassword(String id, String newPassword);
 
+
     String uploadProfile(MultipartFile image, String username) throws IOException;
 
     List<AnggotaModel> getListAnggotaBasedonRole(RoleEnum ROLE);
+
+    String uploadProfile(MultipartFile image, String username, String pastUrl) throws IOException;
+
 }
