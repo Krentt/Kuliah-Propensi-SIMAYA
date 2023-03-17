@@ -7,6 +7,7 @@ import com.a05.simaya.anggota.payload.UbahPasswordDTO;
 import com.a05.simaya.anggota.repository.AnggotaDb;
 import com.a05.simaya.anggota.service.AnggotaService;
 import com.a05.simaya.event.model.DirektoratEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 @Controller
+@Slf4j
 public class AnggotaController {
 
     @Autowired
@@ -62,8 +64,9 @@ public class AnggotaController {
     public String ubahProfile(AnggotaDTO updateAnggota,
                               Principal principal,
                               @RequestParam("upload") MultipartFile image) throws IOException {
-        String fileName = anggotaService.uploadProfile(image, principal.getName());
 
+        String fileName = anggotaService.uploadProfile(image, principal.getName(), updateAnggota.getProfile().getPhotoUrl());
+        log.info(updateAnggota.getProfile().getPhotoUrl());
         updateAnggota.getProfile().setPhotoUrl(fileName);
         anggotaService.updateDataAnggota(updateAnggota);
         return "redirect:/profil";
@@ -107,8 +110,11 @@ public class AnggotaController {
     public String ubahPassword(Model model, UbahPasswordDTO ubahPasswordDTO, Principal principal) {
         AnggotaModel anggota = anggotaService.getAnggotaByUsername(principal.getName());
 
-        if (!anggotaService.cekPassword(ubahPasswordDTO.getId(), ubahPasswordDTO.getOldPassword())) {
-            model.addAttribute("wrong_password", "Salah Kata Sandi");
+        if (anggotaService.cekPassword(ubahPasswordDTO.getId(), ubahPasswordDTO.getNewPassword())) {
+            model.addAttribute("wrong_password", "Masukkan kata sandi yang berbeda!");
+        }
+        else if (!anggotaService.cekPassword(ubahPasswordDTO.getId(), ubahPasswordDTO.getOldPassword())) {
+            model.addAttribute("wrong_password", "Kata sandi lama yang dimasukkan salah!");
         } else {
             anggotaService.gantiPassword(ubahPasswordDTO.getId(), ubahPasswordDTO.getNewPassword());
         }
