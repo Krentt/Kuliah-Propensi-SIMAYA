@@ -125,6 +125,11 @@ public class AnggotaServiceImpl implements AnggotaService {
         return uploadedFileName;
     }
 
+    @Override
+    public List<AnggotaModel> getListAnggotaBasedonRole(RoleEnum ROLE) {
+        return anggotaDb.findAllByRoleEquals(ROLE);
+    }
+
     private AnggotaModel setAnggotaModel(AnggotaDTO anggotaDTO, AnggotaModel anggotaModel) {
         anggotaModel.setRole(RoleEnum.valueOf(anggotaDTO.getRole()));
         anggotaModel.setEmail(anggotaDTO.getEmail());
@@ -160,5 +165,6 @@ public class AnggotaServiceImpl implements AnggotaService {
 
         return profileModel;
     }
+
 
 }
