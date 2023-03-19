@@ -68,29 +68,26 @@
         <div class="card-body">
             <form th:action="@{/tambah-event}" th:object="${event}" method="POST">
 
-                <!--Baris 1-->
-                <div class="row my-3">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-1"></div>
-                            <div class="col-10">
-                                <div class="mb-3">
-                                    <label for="formGroupExampleInput8" class="form-label">Nama Event <span
-                                            style="color: red">*</span></label>
-                                    <input type="text" th:field="*{namaEvent}"
-                                           class="form-control border-success rounded-3 border border-2 input-text"
-                                           id="formGroupExampleInput8" placeholder="Masukkan nama Event..." required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Masukkan Nama Event.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-1"></div>
-                        </div>
-                    </div>
+        <!--Baris 1-->
+        <div class="row my-3">
+          <div class="col-6">
+            <div class="row">
+              <div class="col-1"></div>
+              <div class="col-10">
+                <div class="mb-3">
+                  <label for="formGroupExampleInput8" class="form-label">Nama Event <span style="color: red">*</span></label>
+                  <input type="text" th:field="*{namaEvent}" class="form-control border-success rounded-3 border border-2 input-text" id="formGroupExampleInput8" placeholder="Masukkan nama event..." required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                  <div class="invalid-feedback">
+                    Masukkan Nama Event.
+                  </div>
+                </div>
+              </div>
+              <div class="col-1"></div>
+            </div>
+          </div>
 
                     <div class="col-6">
                         <div class="row">
