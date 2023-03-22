@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -60,6 +61,7 @@ public class AnggotaServiceImpl implements AnggotaService {
         updateAnggotaDTO.setStatusKeanggotaan(anggotaModel.getStatusKeanggotaan());
 
         updateAnggotaDTO.setProfile(anggotaModel.getProfile());
+        log.info("On Get Info Anggota: " + updateAnggotaDTO.getProfile().getPhotoUrl());
 
         return updateAnggotaDTO;
     }
@@ -88,6 +90,10 @@ public class AnggotaServiceImpl implements AnggotaService {
     }
 
     @Override
+    public AnggotaModel getAnggotaById(String id) {
+        return anggotaDb.findAnggotaModelById(id);
+    }
+    @Override
     public boolean cekPassword(String id, String oldPassword) {
         AnggotaModel anggotaModel = anggotaDb.findAnggotaModelById(id);
         return encoder.matches(oldPassword, anggotaModel.getPassword());
@@ -100,9 +106,10 @@ public class AnggotaServiceImpl implements AnggotaService {
     }
 
     @Override
-    public String uploadProfile(MultipartFile image, String username) throws IOException {
+    public String uploadProfile(MultipartFile image, String username, String pastUrl) throws IOException {
+        log.info(String.valueOf(image.isEmpty()));
         if (image.isEmpty())
-            return null;
+            return pastUrl;
 
         String fileName = StringUtils.cleanPath(image.getOriginalFilename());
 
@@ -113,6 +120,11 @@ public class AnggotaServiceImpl implements AnggotaService {
 
         FileUploadUtil.saveFile("src/main/resources/static/user-photos/", username + "." + extension, image);
         return uploadedFileName;
+    }
+
+    @Override
+    public List<AnggotaModel> getListAnggotaBasedonRole(RoleEnum ROLE) {
+        return anggotaDb.findAllByRoleEquals(ROLE);
     }
 
     private AnggotaModel setAnggotaModel(AnggotaDTO anggotaDTO, AnggotaModel anggotaModel) {
@@ -150,5 +162,6 @@ public class AnggotaServiceImpl implements AnggotaService {
 
         return profileModel;
     }
+
 
 }

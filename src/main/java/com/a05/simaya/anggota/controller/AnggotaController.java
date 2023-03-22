@@ -7,7 +7,10 @@ import com.a05.simaya.anggota.payload.UbahPasswordDTO;
 import com.a05.simaya.anggota.repository.AnggotaDb;
 import com.a05.simaya.anggota.service.AnggotaService;
 import com.a05.simaya.event.model.DirektoratEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -17,11 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
 
 @Controller
+@Slf4j
 public class AnggotaController {
 
     @Autowired
@@ -35,15 +40,13 @@ public class AnggotaController {
         return "anggota/form-tambah-anggota";
     }
 
-    @PostMapping(value = "/anggota/viewall")
-    public String postForm(AnggotaDTO anggota, ModelMap model) {
+    @PostMapping(value = "/tambah-anggota")
+    public String postForm(AnggotaDTO anggota, RedirectAttributes redirectAttributes) {
         anggotaService.tambahAnggota(anggota);
 
-        String info = "Data anggota dengan nama " + anggota.getNamaDepan() + " " +
-                anggota.getNamaBelakang() + " telah berhasil ditambahkan";
-        model.addAttribute("modal_add", info);
+        redirectAttributes.addFlashAttribute("success", String.format("Anggota bernama %s berhasil ditambahkan!", anggota.getNamaDepan()));
 
-        return "anggota/daftar-anggota";
+        return "redirect:/anggota/viewall";
     }
 
     @GetMapping(value = "/ubah-profil")
@@ -60,8 +63,9 @@ public class AnggotaController {
     public String ubahProfile(AnggotaDTO updateAnggota,
                               Principal principal,
                               @RequestParam("upload") MultipartFile image) throws IOException {
-        String fileName = anggotaService.uploadProfile(image, principal.getName());
 
+        String fileName = anggotaService.uploadProfile(image, principal.getName(), updateAnggota.getProfile().getPhotoUrl());
+        log.info(updateAnggota.getProfile().getPhotoUrl());
         updateAnggota.getProfile().setPhotoUrl(fileName);
         anggotaService.updateDataAnggota(updateAnggota);
         return "redirect:/profil";
@@ -120,6 +124,24 @@ public class AnggotaController {
         model.addAttribute("ubahPassword", ubahPasswordDTO);
 
         return "anggota/profile";
+    }
+
+    @GetMapping(value = "/profil/{id}")
+    public String profilAnggotaPage(@PathVariable(value = "id") String id,
+                                    Model model, Authentication authentication) {
+        AnggotaModel anggota = anggotaService.getAnggotaById(id);
+        String role = "";
+        if( authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")) ){
+            role = "Admin";
+        }else{
+            role = "Anggota";
+        }
+        model.addAttribute("role",role);
+        model.addAttribute("anggota", anggota);
+        model.addAttribute("aset", getAset(anggota.getProfile()));
+        model.addAttribute("divisi", getDivisi(anggota.getProfile().getDivisi()));
+
+        return "anggota/detail-anggota";
     }
 
     public String getAset(ProfileModel profile) {
