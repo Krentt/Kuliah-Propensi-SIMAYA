@@ -5,6 +5,7 @@ import com.a05.simaya.anggota.payload.AnggotaDTO;
 import com.a05.simaya.anggota.repository.AnggotaDb;
 import com.a05.simaya.anggota.repository.ProfileAnggotaDb;
 import com.a05.simaya.anggota.util.FileUploadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
+@Slf4j
 public class AnggotaServiceImpl implements AnggotaService {
 
     @Autowired
