@@ -5,11 +5,16 @@
     <title>Profil</title>
     <object th:include="fragments/fragment :: css" th:remove="tag"></object>
     <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+<<<<<<< HEAD
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+=======
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
+>>>>>>> d7260314405465f5764ab97340087e9c79503c3a
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .card-style1 {
@@ -47,8 +52,11 @@
             background-attachment: fixed;
             background-size: cover;
             font-family: "Segoe UI", "Segoe UI Semibold", "Segoe UI Black", sans-serif;
+<<<<<<< HEAD
+=======
             min-height: 100%;
             position: relative;
+>>>>>>> d7260314405465f5764ab97340087e9c79503c3a
         }
 
         .section-title {
@@ -98,7 +106,11 @@
             padding: 1.9rem;
         }
 
+<<<<<<< HEAD
+        @media screen and (min-width: 576px){
+=======
         @media screen and (min-width: 576px) {
+>>>>>>> d7260314405465f5764ab97340087e9c79503c3a
             .pe-sm-6, .px-sm-6 {
                 padding-right: 3.5rem;
             }
@@ -113,8 +125,12 @@
         .mb-1-9 {
             margin-bottom: 1.9rem;
         }
+<<<<<<< HEAD
+        @media (min-width: 992px){
+=======
 
         @media (min-width: 992px) {
+>>>>>>> d7260314405465f5764ab97340087e9c79503c3a
 
         }
     </style>
@@ -189,101 +205,101 @@
                                 <p th:text="${anggota.profile.catatan != null} ? ${anggota.profile.catatan} : '-'"></p>
                             </div>
                         </div>
-                            <div class="col-4 text-center mx-auto">
-                                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" onclick="removeWrongPassword()"
-                                        data-target="#staticBackdrop">
-                                    Ubah Kata Sandi
-                                </button>
-                            </div>
+                        <div class="col-4 text-center mx-auto">
+                            <button type="button" class="btn btn-success btn-lg" data-toggle="modal" onclick="removeWrongPassword()"
+                                    data-target="#staticBackdrop">
+                                Ubah Kata Sandi
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="wrongPasswordText" th:text="${wrong_password}" hidden></div>
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form th:action="@{/profil}" th:object="${ubahPassword}" method="POST"
-                          class="container needs-validation">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Ubah Kata Sandi</h1>
-                            <input type="text" th:field="*{id}" hidden>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal"
-                                    aria-label="Close"></button>
+    <div id="wrongPasswordText" th:text="${wrong_password}" hidden></div>
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/profil}" th:object="${ubahPassword}" method="POST"
+                      class="container needs-validation">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Ubah Kata Sandi</h1>
+                        <input type="text" th:field="*{id}" hidden>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div th:if="${wrong_password}">
+                            <div id="wrongPasswordInfo" class="alert alert-danger alert-dismissible fade show"
+                                 role="alert">
+                                <strong th:text="${wrong_password}"></strong>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <div th:if="${wrong_password}">
-                                <div id="wrongPasswordInfo" class="alert alert-danger alert-dismissible fade show"
-                                     role="alert">
-                                    <strong th:text="${wrong_password}"></strong>
-                                </div>
-                            </div>
-                            <div class="my-3">
-                                <label for="formKataSandiLama" class="form-label">Kata Sandi Lama<span
-                                        style="color: red">*</span></label>
-                                <div class="input-group">
-                                    <input type="password" th:field="*{oldPassword}"
-                                           class="form-control input-text border-success rounded-start border border-2"
-                                           id="formKataSandiLama" placeholder="Masukkan kata sandi lama..." required>
-                                    <span class="input-group-text" id="basic-addon1"
-                                          onclick="clickBiEye('#togglePassword1', '#formKataSandiLama')"><i
-                                            class="bi bi-eye-slash mb-2" id="togglePassword1"></i></span>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Masukkan Kata Sandi Lama.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="my-3">
-                                <label for="formKataSandiBaru" class="form-label">Kata Sandi Baru<span
-                                        style="color: red">*</span></label>
-                                <input type="password" onchange="cekNewPassword()" th:field="*{newPassword}"
+                        <div class="my-3">
+                            <label for="formKataSandiLama" class="form-label">Kata Sandi Lama<span
+                                    style="color: red">*</span></label>
+                            <div class="input-group">
+                                <input type="password" th:field="*{oldPassword}"
                                        class="form-control input-text border-success rounded-start border border-2"
-                                       id="formKataSandiBaru" placeholder="Masukkan kata sandi baru..." required>
+                                       id="formKataSandiLama" placeholder="Masukkan kata sandi lama..." required>
+                                <span class="input-group-text" id="basic-addon1"
+                                      onclick="clickBiEye('#togglePassword1', '#formKataSandiLama')"><i
+                                        class="bi bi-eye-slash mb-2" id="togglePassword1"></i></span>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                                 <div class="invalid-feedback">
-                                    Masukkan Kata Sandi Baru.
-                                </div>
-                            </div>
-                            <div class="my-3">
-                                <label for="formKonfirmasiKataSandiBaru" class="form-label">Konfirmasi Kata Sandi
-                                    Baru<span style="color: red">*</span></label>
-                                <input type="password" onchange="cekNewPassword()"
-                                       class="form-control border-success rounded-start border border-2"
-                                       id="formKonfirmasiKataSandiBaru" placeholder="Konfirmasi kata sandi baru..."
-                                       required>
-                                <div class="valid-feedback">
-                                    Kata sandi sesuai.
-                                </div>
-                                <div class="invalid-feedback">
-                                    Kata sandi tidak sesuai.
+                                    Masukkan Kata Sandi Lama.
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit"
-                                    class="btn btn-success"
-                                    data-toggle="modal"
-                                    data-target="#exampleModal"
-                                    id="submit" disabled>
-                                Ubah
-                            </button>
+                        <div class="my-3">
+                            <label for="formKataSandiBaru" class="form-label">Kata Sandi Baru<span
+                                    style="color: red">*</span></label>
+                            <input type="password" onchange="cekNewPassword()" th:field="*{newPassword}"
+                                   class="form-control input-password border-success rounded-start border border-2"
+                                   id="formKataSandiBaru" placeholder="Masukkan kata sandi baru..." required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Kata Sandi minimal terdiri dari 8 karakter.
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="my-3">
+                            <label for="formKonfirmasiKataSandiBaru" class="form-label">Konfirmasi Kata Sandi
+                                Baru<span style="color: red">*</span></label>
+                            <input type="password" onchange="cekNewPassword()"
+                                   class="form-control border-success rounded-start border border-2"
+                                   id="formKonfirmasiKataSandiBaru" placeholder="Konfirmasi kata sandi baru..."
+                                   required>
+                            <div class="valid-feedback">
+                                Kata sandi sesuai.
+                            </div>
+                            <div class="invalid-feedback">
+                                Kata sandi tidak sesuai.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit"
+                                class="btn btn-success"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                                id="submit" disabled>
+                            Ubah
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
 
 
@@ -298,6 +314,22 @@
         const text_wrong_passwors = document.getElementById("wrongPasswordText").innerText
         if (text_wrong_passwors === "Masukkan kata sandi yang berbeda!" || text_wrong_passwors === "Kata sandi lama yang dimasukkan salah!") {
             $('#staticBackdrop').modal('show');
+        }
+    });
+
+    $('.input-password').change((e) => {
+        if (e.target.value.length < 8) {
+            $(e.target).addClass("is-invalid");
+            $(e.target).addClass("border-danger");
+
+            $(e.target).removeClass("border-success");
+            $(e.target).removeClass("is-valid");
+        } else {
+            $(e.target).removeClass("is-invalid");
+            $(e.target).removeClass("border-danger");
+
+            $(e.target).addClass("border-success");
+            $(e.target).addClass("is-valid");
         }
     });
 
