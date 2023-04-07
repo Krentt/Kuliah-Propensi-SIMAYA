@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class UsahaServiceImpl implements UsahaService {
     @Override
     public UsahaModel tambahUsaha(UsahaDTO usahaDTO) {
         UsahaModel usahaModel = setUsahaModel(usahaDTO, new UsahaModel());
+        usahaModel.setLastEdit(LocalDateTime.now());
         usahaDb.save(usahaModel);
 
         return usahaModel;
@@ -43,7 +45,11 @@ public class UsahaServiceImpl implements UsahaService {
     public UsahaModel ubahUsaha(UsahaDTO usahaDTO) {
         UsahaModel pastUsahaModel = usahaDb.getByIdUsaha(usahaDTO.getIdUsaha());
         UsahaModel usahaModel = setUsahaModel(usahaDTO, pastUsahaModel);
-        usahaModel.setStatusUsaha(StatusUsaha.BELUM_TERVERIFIKASI);
+        usahaModel.setIdUsaha(usahaDTO.getIdUsaha());
+        if (usahaModel.getStatusUsaha() != StatusUsaha.BELUM_TERVERIFIKASI) {
+            usahaModel.setLastEdit(LocalDateTime.now());
+            usahaModel.setStatusUsaha(StatusUsaha.BELUM_TERVERIFIKASI);
+        }
         usahaDb.save(usahaModel);
 
         return usahaModel;
@@ -154,7 +160,7 @@ public class UsahaServiceImpl implements UsahaService {
     }
 
     private UsahaModel setUsahaModel(UsahaDTO usahaDTO, UsahaModel usahaModel) {
-        usahaModel.setIdUsaha(usahaDTO.getIdUsaha());
+        usahaModel.setUsername(usahaDTO.getUsername());
         usahaModel.setNamaProduk(usahaDTO.getNamaProduk());
         usahaModel.setHargaProduk(usahaDTO.getHargaProduk());
         usahaModel.setNamaPenjual(usahaDTO.getNamaPenjual());
@@ -162,5 +168,10 @@ public class UsahaServiceImpl implements UsahaService {
         usahaModel.setDeskripsiProduk(usahaDTO.getDeskripsiProduk());
 
         return usahaModel;
+    }
+
+    @Override
+    public List<UsahaModel> getListUsaha(){
+        return usahaDb.findAll();
     }
 }
