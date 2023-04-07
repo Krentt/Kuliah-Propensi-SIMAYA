@@ -95,7 +95,9 @@ public class UsahaController {
     }
 
     @GetMapping(value = "/daftar-usaha")
-    public String daftarUsaha() {
+    public String daftarUsaha(Model model) {
+        List<UsahaModel> listUsaha = usahaService.getListUsaha();
+        model.addAttribute("listUsaha", listUsaha);
         return "usaha/daftar-usaha";
     }
 
