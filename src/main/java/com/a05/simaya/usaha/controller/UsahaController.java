@@ -97,9 +97,12 @@ public class UsahaController {
         UsahaModel usaha = usahaService.getUsaha(id);
         Duration duration = Duration.between(usaha.getLastEdit(), LocalDateTime.now());
 
+        List<GambarUsahaModel> listGambar = usaha.getGambar();
+
         model.addAttribute("anggota", anggotaService.getAnggotaByUsername(principal.getName()));
         model.addAttribute("usaha", usaha);
         model.addAttribute("waktu", duration.getSeconds()/60);
+        model.addAttribute("listGambar", listGambar);
 
         return "usaha/detail-usaha";
     }
