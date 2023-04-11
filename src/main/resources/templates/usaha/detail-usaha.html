@@ -409,8 +409,6 @@
                 </div>
             </div>
         </span>
-      </span>
-    </span>
 
       <span th:unless="${anggota.role.name() == 'PENGEMBANGAN_USAHA'}">
           <span th:if="${anggota.namaDepan} + ' ' + ${anggota.namaBelakang} == ${usaha.namaPenjual}">
@@ -452,7 +450,7 @@
               </span>
           </span>
       </span>
-  </div>
+    </div>
 </div>
 
 <!--FOOTER-->
@@ -506,7 +504,6 @@
               window.location.reload();
           }
       })
-
 
   }
 
