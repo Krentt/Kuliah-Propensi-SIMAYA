@@ -98,9 +98,12 @@ public class UsahaController {
         UsahaModel usaha = usahaService.getUsaha(id);
         Duration duration = Duration.between(usaha.getLastEdit(), LocalDateTime.now());
 
+        List<GambarUsahaModel> listGambar = usaha.getGambar();
+
         model.addAttribute("anggota", anggotaService.getAnggotaByUsername(principal.getName()));
         model.addAttribute("usaha", usaha);
         model.addAttribute("waktu", duration.getSeconds()/60);
+        model.addAttribute("listGambar", listGambar);
 
         return "usaha/detail-usaha";
     }
@@ -120,8 +123,23 @@ public class UsahaController {
     }
 
     @GetMapping(value = "/daftar-usaha")
-    public String daftarUsaha() {
+    public String daftarUsaha(Model model) {
+        List<UsahaModel> listUsaha = usahaService.getListUsaha();
+        model.addAttribute("listUsaha", listUsaha);
         return "usaha/daftar-usaha";
+    }
+
+    @GetMapping(value = "/daftar-usaha-verifikasi")
+    public String getDaftarUsahaYangPerluDiverifikasi() {
+        return "usaha/daftar-usaha-perlu-diverifikasi";
+    }
+
+    @GetMapping(value = "/daftar-usaha-saya")
+    public String getDaftarUsahaSaya(Model model,
+                                     Principal principal) {
+        List<UsahaModel> listUsaha = usahaService.getUsahaByUsername(principal.getName());
+        model.addAttribute("listUsaha", listUsaha);
+        return "usaha/daftar-usaha-saya";
     }
 
 }
