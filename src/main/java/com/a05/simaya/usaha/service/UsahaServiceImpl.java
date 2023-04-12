@@ -73,6 +73,8 @@ public class UsahaServiceImpl implements UsahaService {
         UsahaModel usaha = UsahaModel.orElse(null);
         if (usaha != null){
             List<GambarUsahaModel> gambarUsahaModels = gambarUsahaDb.findAllByUsahaModel(usaha);
+            CatatanModel catatanModel = catatanDb.findCatatanModelByUsaha(usaha);
+            catatanDb.delete(catatanModel);
             gambarUsahaDb.deleteAll(gambarUsahaModels);
             usahaDb.delete(usahaModel);
             return true;
@@ -197,7 +199,7 @@ public class UsahaServiceImpl implements UsahaService {
     }
 
     @Override
-    public List<UsahaModel> getListUsaha(){
-        return usahaDb.findAll();
+    public List<UsahaModel> getListUsahaByName(String name) {
+        return usahaDb.findAllByNamaProdukContains(name);
     }
 }
