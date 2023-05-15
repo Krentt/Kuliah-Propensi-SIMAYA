@@ -9,5 +9,6 @@ public enum JenisEnum {
     SPONSOR,
     DONATUR,
     PENDANAAN,
-    EVENT
+    EVENT,
+    ZISWAF
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -34,14 +36,55 @@ public class ZiswafRestController {
     }
 
     @GetMapping(value = "/pengeluaran-ziswaf")
-    private ResponseEntity ringkasanPengeluaranZiswaf(){
+    private ResponseEntity ringkasanPengeluaranZiswaf() {
         ResponseEntity responseEntity = null;
-        try{
+        try {
             List<KeuanganModel> listKeuangan = keuanganService.getListPengeluaranZiswaf();
             responseEntity = ResponseEntity.ok(listKeuangan);
         } catch (Exception e) {
             responseEntity = ResponseEntity.badRequest().body(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
+    }
+
+    @GetMapping(value = "/bar_chart")
+    public ResponseEntity getBarChartData() {
+        ResponseEntity response;
+
+        try {
+            Object responseMap = ziswafService.getBarChartData();
+            response = ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            response = ResponseEntity.badRequest().body(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return response;
+    }
+
+    @GetMapping(value = "/line_chart")
+    public ResponseEntity getLineChartDataDaily() {
+        ResponseEntity response;
+
+        try {
+            Object responseMap = ziswafService.getLineChartDataDaily();
+            response = ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            response = ResponseEntity.badRequest().body(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return response;
+    }
+
+    @GetMapping(value = "/line_chart_monthly")
+    public ResponseEntity getLineChartMonthly() {
+        ResponseEntity response;
+
+        try {
+            Object responseMap = ziswafService.getLineChartDataMonthly();
+            response = ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            response = ResponseEntity.badRequest().body(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 }
