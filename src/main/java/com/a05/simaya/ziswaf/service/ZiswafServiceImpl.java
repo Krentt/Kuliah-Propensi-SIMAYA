@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ZiswafServiceImpl implements ZiswafService {
@@ -21,6 +22,11 @@ public class ZiswafServiceImpl implements ZiswafService {
         zizwafDb.save(usahaModel);
 
         return usahaModel;
+    }
+
+    @Override
+    public List<ZiswafModel> getListPemasukan() {
+        return zizwafDb.findAll();
     }
 
     private ZiswafModel setZiswafModel(ZiswafDTO zizwafDTO, ZiswafModel ziswafModel) {
